@@ -1,1 +1,1 @@
-# Inżynieria Oprogramowania - Projekt
+# Sztuczna Inteligencja - Laboratorium
