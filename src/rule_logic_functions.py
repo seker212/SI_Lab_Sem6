@@ -91,8 +91,6 @@ class GlucoseInterface:
                     self.solver.add_clause(expression)
                     if self._debug:
                         print(expression)
-        else:
-            self.solver.add_clause([-params[0], -x])
 
     def solve(self) -> Optional[List[int]]:
         is_solved = self.solver.solve()
