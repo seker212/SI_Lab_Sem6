@@ -129,23 +129,23 @@ def get_existing_neighbour_edges(verticalMatrix: Matrix, horizontalMatrix: Matri
     if matrixType == 'v':
         if check_edge(verticalMatrix, coords) is None: return None
 
-        if check_edge(verticalMatrix, [coords[0]-1, coords[1]]) is not None: verticalEdges.append([coords[0]-1, coords[1]])
-        if check_edge(verticalMatrix, [coords[0]+1, coords[1]]) is not None: verticalEdges.append([coords[0]+1, coords[1]])
+        if check_edge(verticalMatrix, [coords[0]-1, coords[1]]) is True: verticalEdges.append([coords[0]-1, coords[1]])
+        if check_edge(verticalMatrix, [coords[0]+1, coords[1]]) is True: verticalEdges.append([coords[0]+1, coords[1]])
 
-        if check_edge(horizontalMatrix, [coords[0], coords[1]]) is not None: horizontalEdges.append([coords[0], coords[1]])
-        if check_edge(horizontalMatrix, [coords[0], coords[1]-1]) is not None: horizontalEdges.append([coords[0], coords[1]-1])
-        if check_edge(horizontalMatrix, [coords[0]+1, coords[1]]) is not None: horizontalEdges.append([coords[0]+1, coords[1]])
-        if check_edge(horizontalMatrix, [coords[0]+1, coords[1]-1]) is not None: horizontalEdges.append([coords[0]+1, coords[1]-1])
+        if check_edge(horizontalMatrix, [coords[0], coords[1]]) is True: horizontalEdges.append([coords[0], coords[1]])
+        if check_edge(horizontalMatrix, [coords[0], coords[1]-1]) is True: horizontalEdges.append([coords[0], coords[1]-1])
+        if check_edge(horizontalMatrix, [coords[0]+1, coords[1]]) is True: horizontalEdges.append([coords[0]+1, coords[1]])
+        if check_edge(horizontalMatrix, [coords[0]+1, coords[1]-1]) is True: horizontalEdges.append([coords[0]+1, coords[1]-1])
     else:
         if check_edge(horizontalMatrix, coords) is None: return None
 
-        if check_edge(horizontalMatrix, [coords[0], coords[1]-1]) is not None: horizontalEdges.append([coords[0], coords[1]-1])
-        if check_edge(horizontalMatrix, [coords[0], coords[1]+1]) is not None: horizontalEdges.append([coords[0], coords[1]+1])
+        if check_edge(horizontalMatrix, [coords[0], coords[1]-1]) is True: horizontalEdges.append([coords[0], coords[1]-1])
+        if check_edge(horizontalMatrix, [coords[0], coords[1]+1]) is True: horizontalEdges.append([coords[0], coords[1]+1])
 
-        if check_edge(verticalMatrix, [coords[0], coords[1]]) is not None: verticalEdges.append([coords[0], coords[1]])
-        if check_edge(verticalMatrix, [coords[0], coords[1]+1]) is not None: verticalEdges.append([coords[0], coords[1]+1])
-        if check_edge(verticalMatrix, [coords[0]-1, coords[1]]) is not None: verticalEdges.append([coords[0]-1, coords[1]])
-        if check_edge(verticalMatrix, [coords[0]-1, coords[1]+1]) is not None: verticalEdges.append([coords[0]-1, coords[1]+1])
+        if check_edge(verticalMatrix, [coords[0], coords[1]]) is True: verticalEdges.append([coords[0], coords[1]])
+        if check_edge(verticalMatrix, [coords[0], coords[1]+1]) is True: verticalEdges.append([coords[0], coords[1]+1])
+        if check_edge(verticalMatrix, [coords[0]-1, coords[1]]) is True: verticalEdges.append([coords[0]-1, coords[1]])
+        if check_edge(verticalMatrix, [coords[0]-1, coords[1]+1]) is True: verticalEdges.append([coords[0]-1, coords[1]+1])
 
     return [verticalEdges, horizontalEdges]
 
