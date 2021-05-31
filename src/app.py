@@ -1,4 +1,7 @@
+from enum import Flag
 import os, sys
+
+from sympy.abc import T
 sys.path.append(os.getcwd())
 
 from typing import List
@@ -59,10 +62,16 @@ if __name__ == '__main__':
     print(solution)
     for x in solution:
         if x > 0 and x % 2 == 0:
-            print(numToCoordsV(x, [V_matrix.n, V_matrix.m]))
-    
-    print('---')
-
-    for x in solution:
+            coords = numToCoordsV(x, [V_matrix.n, V_matrix.m])
+            V_matrix.SetValue(coords[0], coords[1], True)
+        if x < 0 and x % 2 == 0:
+            coords = numToCoordsV(-x, [V_matrix.n, V_matrix.m])
+            V_matrix.SetValue(coords[0], coords[1], False)
         if x > 0 and x % 2 == 1:
-            print(numToCoordsH(x, [H_matrix.n, H_matrix.m]))
+            coords = numToCoordsH(x, [H_matrix.n, H_matrix.m])
+            H_matrix.SetValue(coords[0], coords[1], True)
+        if x < 0 and x % 2 == 1:
+            coords = numToCoordsH(-x, [H_matrix.n, H_matrix.m])
+            H_matrix.SetValue(coords[0], coords[1], False)
+
+    print(check_one_loop(V_matrix, H_matrix))
