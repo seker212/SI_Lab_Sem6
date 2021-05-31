@@ -1,4 +1,3 @@
-from threading import setprofile
 from pysat.solvers import Glucose3
 from typing import List, Optional
 from sympy.logic.boolalg import to_cnf
@@ -45,24 +44,24 @@ class GlucoseInterface:
                     s = str(y)[0]
                 if s == 'A':
                     if t:
+                        q.append(-params[0])
+                    else:
+                        q.append(params[0])
+                elif s == 'B':
+                    if t:
                         q.append(-params[1])
                     else:
                         q.append(params[1])
-                elif s == 'B':
+                elif s == 'C':
                     if t:
                         q.append(-params[2])
                     else:
                         q.append(params[2])
-                elif s == 'C':
+                elif s == 'D':
                     if t:
                         q.append(-params[3])
                     else:
                         q.append(params[3])
-                elif s == 'D':
-                    if t:
-                        q.append(-params[4])
-                    else:
-                        q.append(params[4])
             self.solver.add_clause(q)
 
     def add_exactly_three(self, params: List[int]) -> None:
@@ -71,6 +70,16 @@ class GlucoseInterface:
             transformed.append(-p)
         return self.add_exactly_one(transformed)
     
-    def solve():
-        self.solver.solve()
-        return self.solver.get_model()
+    def add_nq_solution(self) -> None:
+        model: List[int] = self.solver.get_model().copy()
+        result: List[int] = []
+        for x in model.copy():
+            result.append(-x)
+        self.solver.add_clause(result)
+
+    def solve(self) -> Optional[List[int]]:
+        is_solved = self.solver.solve()
+        if is_solved:
+            return self.solver.get_model()
+        else:
+            return None
