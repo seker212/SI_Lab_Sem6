@@ -1,4 +1,4 @@
-from matrix import Matrix
+from src.matrix import Matrix
 
 def GetValuesFromFile(path):
     result = []
@@ -11,8 +11,11 @@ def GetValuesFromFile(path):
 
 def SetValuesFromFile(matrix, lines):
     for i in range(len(lines)):
-        for j in range(len(lines[i])):
-            if lines[i][j] == ',':
+        splitted = lines[i].split(',')
+        for j in range(len(splitted)):
+            # if lines[i][j] == ',':
+            #     matrix.SetValue(i, j, None)
+            if splitted[j] == '':
                 matrix.SetValue(i, j, None)
             else:
-                matrix.SetValue(i, j, int(lines[i][j]))
+                matrix.SetValue(i, j, int(splitted[j]))

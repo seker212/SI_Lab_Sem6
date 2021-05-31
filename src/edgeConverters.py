@@ -1,9 +1,12 @@
-def coordsToNumV(row: int, col: int):
+from typing import List
+
+def coordsToNumV(row: int, col: int, dimensions: List[int]):
     """Converts vertical edge co-ordinates to its number
 
     Args:
         row (int): [description]
         col (int): [description]
+        dimensions (List[int]): [description]
 
     Returns:
         Optional[int]: [description]
@@ -13,12 +16,13 @@ def coordsToNumV(row: int, col: int):
         return None
     return col * dimensions[0] + row+1
 
-def coordsToNumH(row, col):
+def coordsToNumH(row: int, col: int, dimensions: List[int]):
     """ Converts horizontal edge co-ordinates to its number
 
     Args:
         row (int): [description]
         col (int): [description]
+        dimensions (List[int]): [description]
 
     Returns:
         Optional[int]: [description]
@@ -27,11 +31,12 @@ def coordsToNumH(row, col):
         return None
     return row * dimensions[1] + col+1
 
-def numToCoordsV(num):
+def numToCoordsV(num: int, dimensions: List[int]):
     """ Converts vertical edge number to its co-ordinates
 
     Args:
         num (int): [description]
+        dimensions (List[int]): [description]
 
     Returns:
         tuple[int, int]: [description]
@@ -46,11 +51,12 @@ def numToCoordsV(num):
     else: row -= 1
     return (row, col)
 
-def numToCoordsH(num):
+def numToCoordsH(num: int, dimensions: List[int]):
     """ Converts horizontal edge number to its co-ordinates
 
     Args:
         num (int): [description]
+        dimensions (List[int]): [description]
 
     Returns:
         tuple[int, int]: [description]
