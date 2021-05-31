@@ -19,27 +19,27 @@ if __name__ == '__main__':
 
 
     # RULE 1
-    # for x in range(val_matrix.n):
-    #     for y in range(val_matrix.m):
-    #         params: List[int] = []
-    #         if val_matrix.matrix[x][y] is None:
-    #             continue
-    #         else:
-    #             params.append(coordsToNumH(x,y, [H_matrix.n, H_matrix.m]))
-    #             params.append(coordsToNumH(x+1,y, [H_matrix.n, H_matrix.m]))
-    #             params.append(coordsToNumV(x,y, [V_matrix.n, V_matrix.m]))
-    #             params.append(coordsToNumV(x,y+1, [V_matrix.n, V_matrix.m]))
+    for x in range(val_matrix.n):
+        for y in range(val_matrix.m):
+            params: List[int] = []
+            if val_matrix.matrix[x][y] is None:
+                continue
+            else:
+                params.append(coordsToNumH(x,y, [H_matrix.n, H_matrix.m]))
+                params.append(coordsToNumH(x+1,y, [H_matrix.n, H_matrix.m]))
+                params.append(coordsToNumV(x,y, [V_matrix.n, V_matrix.m]))
+                params.append(coordsToNumV(x,y+1, [V_matrix.n, V_matrix.m]))
 
-    #         print(params)
+            print(params)
 
-    #         if val_matrix.matrix[x][y] == 0:
-    #             solver_interface.add_none_of(params)
-    #         elif val_matrix.matrix[x][y] == 1:
-    #             solver_interface.add_exactly_one(params)
-    #         elif val_matrix.matrix[x][y] == 2:
-    #             solver_interface.add_exactly_two(params)
-    #         elif val_matrix.matrix[x][y] == 3:
-    #             solver_interface.add_exactly_three(params)
+            if val_matrix.matrix[x][y] == 0:
+                solver_interface.add_none_of(params)
+            elif val_matrix.matrix[x][y] == 1:
+                solver_interface.add_exactly_one(params)
+            elif val_matrix.matrix[x][y] == 2:
+                solver_interface.add_exactly_two(params)
+            elif val_matrix.matrix[x][y] == 3:
+                solver_interface.add_exactly_three(params)
 
     # RULE 2 - vertical
     for x in range(V_matrix.n):
@@ -47,11 +47,13 @@ if __name__ == '__main__':
             solver_interface.add_exactly_one_or_nq_x(coordsToNumV(x,y, [V_matrix.n, V_matrix.m]), v_pre(x, y, [V_matrix.n, V_matrix.m], [H_matrix.n, H_matrix.m]))
             solver_interface.add_exactly_one_or_nq_x(coordsToNumV(x,y, [V_matrix.n, V_matrix.m]), v_succ(x, y, [V_matrix.n, V_matrix.m], [H_matrix.n, H_matrix.m]))
 
-    # # RULE 2 - hori
-    # for x in range(H_matrix.n):
-    #     for y in range(H_matrix.m):
-    #         solver_interface.add_exactly_one_or_nq_x(coordsToNumV(x,y, [H_matrix.n, H_matrix.m]), h_pre(x, y, [V_matrix.n, V_matrix.m], [H_matrix.n, H_matrix.m]))
-    #         solver_interface.add_exactly_one_or_nq_x(coordsToNumV(x,y, [H_matrix.n, H_matrix.m]), h_succ(x, y, [V_matrix.n, V_matrix.m], [H_matrix.n, H_matrix.m]))
+    # RULE 2 - hori
+    for x in range(H_matrix.n):
+        for y in range(H_matrix.m):
+            solver_interface.add_exactly_one_or_nq_x(coordsToNumH(x,y, [H_matrix.n, H_matrix.m]), h_pre(x, y, [V_matrix.n, V_matrix.m], [H_matrix.n, H_matrix.m]))
+            solver_interface.add_exactly_one_or_nq_x(coordsToNumH(x,y, [H_matrix.n, H_matrix.m]), h_succ(x, y, [V_matrix.n, V_matrix.m], [H_matrix.n, H_matrix.m]))
+
+    # solver_interface.solver.add_clause([15]) #FIXME: Remove
 
     solution = solver_interface.solve()
     print(solution)

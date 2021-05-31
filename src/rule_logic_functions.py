@@ -80,7 +80,7 @@ class GlucoseInterface:
     def add_exactly_one_or_nq_x(self, x: int, params: List[int]) -> None:
         # At least one
         expression: List[int] = params.copy()
-        expression.append(x)
+        expression.append(-x)
         self.solver.add_clause(expression)
         
         # At most one
