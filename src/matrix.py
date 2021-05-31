@@ -10,4 +10,10 @@ class Matrix:
     def SetValue(self, x, y, value):
         self.matrix[x][y] = value
 
+    def Print(self):
+        for i in range(self.n):
+            for j in range(self.m):
+                print(self.GetValue(i,j),end=' ')
+            print('')
+
     

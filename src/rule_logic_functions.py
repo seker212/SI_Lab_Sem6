@@ -3,6 +3,8 @@ from typing import List, Optional
 from sympy.logic.boolalg import to_cnf
 from sympy.abc import A, B, C, D
 
+from matrix import Matrix
+
 two_of_four = to_cnf((A&B&~C&~D)|(A&~B&C&~D)|(A&~B&~C&D)|(~A&B&C&~D)|(~A&B&~C&D)|(~A&~B&C&D))
 
 class GlucoseInterface:
@@ -98,3 +100,118 @@ class GlucoseInterface:
             return self.solver.get_model()
         else:
             return None
+
+######
+
+def check_edge(matrix: Matrix, coords: List[int]):
+    if coords[0] < 0 or coords[1] < 0:
+        return None
+    if coords[0] > matrix.n-1 or coords[1] > matrix.m-1:
+        return None
+    return matrix.GetValue(coords[0], coords[1])
+
+def get_existing_neighbour_edges(verticalMatrix: Matrix, horizontalMatrix: Matrix, coords: List[int], matrixType):
+    """Returns coordinates of existing neighbour edges
+
+    Args:
+        verticalMatrix (int): [description]
+        horizontalMatrix (int): [description]
+        coords (List[int]): [description]
+        matrixType 9string): [description]
+
+    Returns:
+        None: given edge is invalid
+        List[int]: list with list of coords from the vertical matrix and list of cords from horizontal matrix
+    """
+    verticalEdges = []
+    horizontalEdges = []
+
+    if matrixType == 'v':
+        if check_edge(verticalMatrix, coords) is None: return None
+
+        if check_edge(verticalMatrix, [coords[0]-1, coords[1]]) is not None: verticalEdges.append([coords[0]-1, coords[1]])
+        if check_edge(verticalMatrix, [coords[0]+1, coords[1]]) is not None: verticalEdges.append([coords[0]+1, coords[1]])
+
+        if check_edge(horizontalMatrix, [coords[0], coords[1]]) is not None: horizontalEdges.append([coords[0], coords[1]])
+        if check_edge(horizontalMatrix, [coords[0], coords[1]-1]) is not None: horizontalEdges.append([coords[0], coords[1]-1])
+        if check_edge(horizontalMatrix, [coords[0]+1, coords[1]]) is not None: horizontalEdges.append([coords[0]+1, coords[1]])
+        if check_edge(horizontalMatrix, [coords[0]+1, coords[1]-1]) is not None: horizontalEdges.append([coords[0]+1, coords[1]-1])
+    else:
+        if check_edge(horizontalMatrix, coords) is None: return None
+
+        if check_edge(horizontalMatrix, [coords[0], coords[1]-1]) is not None: horizontalEdges.append([coords[0], coords[1]-1])
+        if check_edge(horizontalMatrix, [coords[0], coords[1]+1]) is not None: horizontalEdges.append([coords[0], coords[1]+1])
+
+        if check_edge(verticalMatrix, [coords[0], coords[1]]) is not None: verticalEdges.append([coords[0], coords[1]])
+        if check_edge(verticalMatrix, [coords[0], coords[1]+1]) is not None: verticalEdges.append([coords[0], coords[1]+1])
+        if check_edge(verticalMatrix, [coords[0]-1, coords[1]]) is not None: verticalEdges.append([coords[0]-1, coords[1]])
+        if check_edge(verticalMatrix, [coords[0]-1, coords[1]+1]) is not None: verticalEdges.append([coords[0]-1, coords[1]+1])
+
+    return [verticalEdges, horizontalEdges]
+
+def check_one_loop(verticalMatrix: Matrix, horizontalMatrix: Matrix):
+    """Checks if the result contains only one loop
+
+    Args:
+        verticalMatrix (int): [description]
+        horizontalMatrix (int): [description]
+
+    Returns:
+        None: something is wrong
+        True: the result contains one loop
+        False: the result contains more than one loop or any extra edges
+    """
+
+    totalEdgesV = 0
+    totalEdgesH = 0
+    startEdgeCoords = None
+    previousEdgeType = 'v'
+
+    #Firstly, count existing vertical edges and keep the coordinates of the first one
+    for i in range (verticalMatrix.n):
+        for j in range (verticalMatrix.m):
+            if verticalMatrix.GetValue(i,j) is True:
+                totalEdgesV += 1
+                if startEdgeCoords is None:
+                    startEdgeCoords = [i,j]
+    if totalEdgesV == 0:
+        return None
+
+    #Count existing horizontal edges:
+    for i in range (horizontalMatrix.n):
+        for j in range (horizontalMatrix.m):
+            if horizontalMatrix.GetValue(i,j) is True:
+                totalEdgesH += 1
+    if totalEdgesH == 0:
+        return None
+
+    totalEdges = totalEdgesV+totalEdgesH
+    currentEdgeCoords = startEdgeCoords
+    previousEdgeCoords = None
+    loopEdgeCounter = 0
+    newEdgesCords = None
+
+    while (True):
+        loopEdgeCounter += 1
+        newEdges = get_existing_neighbour_edges(verticalMatrix, horizontalMatrix, currentEdgeCoords, previousEdgeType)
+        if len(newEdges[0]+newEdges[1]) != 2:
+            return None
+
+        for edge in newEdges[0]:
+            if edge != previousEdgeCoords:
+                previousEdgeType = 'v'
+                newEdgesCords = edge
+        for edge in newEdges[1]:
+            if edge != previousEdgeCoords:
+                previousEdgeType = 'h'
+                newEdgesCords = edge
+
+        previousEdgeCoords = currentEdgeCoords
+        currentEdgeCoords = newEdgesCords
+        if newEdgesCords == startEdgeCoords and previousEdgeType == 'v':
+            break
+
+    if loopEdgeCounter == totalEdges:
+        return True
+    else:
+        return False
