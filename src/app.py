@@ -1,4 +1,3 @@
-from enum import Flag
 import os, sys
 
 from sympy.abc import T
@@ -28,12 +27,10 @@ if __name__ == '__main__':
             if val_matrix.matrix[x][y] is None:
                 continue
             else:
-                params.append(coordsToNumH(x,y, [H_matrix.n, H_matrix.m]))
-                params.append(coordsToNumH(x+1,y, [H_matrix.n, H_matrix.m]))
-                params.append(coordsToNumV(x,y, [V_matrix.n, V_matrix.m]))
-                params.append(coordsToNumV(x,y+1, [V_matrix.n, V_matrix.m]))
-
-            print(params)
+                params.append(coordsToNumH(x,y, [val_matrix.n, val_matrix.m]))
+                params.append(coordsToNumH(x+1,y, [val_matrix.n, val_matrix.m]))
+                params.append(coordsToNumV(x,y, [val_matrix.n, val_matrix.m]))
+                params.append(coordsToNumV(x,y+1, [val_matrix.n, val_matrix.m]))
 
             if val_matrix.matrix[x][y] == 0:
                 solver_interface.add_none_of(params)
@@ -47,31 +44,68 @@ if __name__ == '__main__':
     # RULE 2 - vertical
     for x in range(V_matrix.n):
         for y in range(V_matrix.m):
-            solver_interface.add_exactly_one_or_nq_x(coordsToNumV(x,y, [V_matrix.n, V_matrix.m]), v_pre(x, y, [V_matrix.n, V_matrix.m], [H_matrix.n, H_matrix.m]))
-            solver_interface.add_exactly_one_or_nq_x(coordsToNumV(x,y, [V_matrix.n, V_matrix.m]), v_succ(x, y, [V_matrix.n, V_matrix.m], [H_matrix.n, H_matrix.m]))
+            solver_interface.add_exactly_one_or_nq_x(coordsToNumV(x,y, [val_matrix.n, val_matrix.m]), v_pre(x, y, [val_matrix.n, val_matrix.m], [val_matrix.n, val_matrix.m]))
+            solver_interface.add_exactly_one_or_nq_x(coordsToNumV(x,y, [val_matrix.n, val_matrix.m]), v_succ(x, y, [val_matrix.n, val_matrix.m], [val_matrix.n, val_matrix.m]))
 
     # RULE 2 - hori
     for x in range(H_matrix.n):
         for y in range(H_matrix.m):
-            solver_interface.add_exactly_one_or_nq_x(coordsToNumH(x,y, [H_matrix.n, H_matrix.m]), h_pre(x, y, [V_matrix.n, V_matrix.m], [H_matrix.n, H_matrix.m]))
-            solver_interface.add_exactly_one_or_nq_x(coordsToNumH(x,y, [H_matrix.n, H_matrix.m]), h_succ(x, y, [V_matrix.n, V_matrix.m], [H_matrix.n, H_matrix.m]))
-
-    # solver_interface.solver.add_clause([15]) #FIXME: Remove
+            solver_interface.add_exactly_one_or_nq_x(coordsToNumH(x,y, [val_matrix.n, val_matrix.m]), h_pre(x, y, [val_matrix.n, val_matrix.m], [val_matrix.n, val_matrix.m]))
+            solver_interface.add_exactly_one_or_nq_x(coordsToNumH(x,y, [val_matrix.n, val_matrix.m]), h_succ(x, y, [val_matrix.n, val_matrix.m], [val_matrix.n, val_matrix.m]))
 
     solution = solver_interface.solve()
     print(solution)
     for x in solution:
         if x > 0 and x % 2 == 0:
-            coords = numToCoordsV(x, [V_matrix.n, V_matrix.m])
-            V_matrix.SetValue(coords[0], coords[1], True)
+            coords = numToCoordsV(x, [val_matrix.n, val_matrix.m])
+            if coords is not None:
+                V_matrix.SetValue(coords[0], coords[1], True)
         if x < 0 and x % 2 == 0:
-            coords = numToCoordsV(-x, [V_matrix.n, V_matrix.m])
-            V_matrix.SetValue(coords[0], coords[1], False)
+            coords = numToCoordsV(-x, [val_matrix.n, val_matrix.m])
+            if coords is not None:
+                V_matrix.SetValue(coords[0], coords[1], False)
         if x > 0 and x % 2 == 1:
-            coords = numToCoordsH(x, [H_matrix.n, H_matrix.m])
-            H_matrix.SetValue(coords[0], coords[1], True)
+            coords = numToCoordsH(x, [val_matrix.n, val_matrix.m])
+            if coords is not None:
+                H_matrix.SetValue(coords[0], coords[1], True)
         if x < 0 and x % 2 == 1:
-            coords = numToCoordsH(-x, [H_matrix.n, H_matrix.m])
-            H_matrix.SetValue(coords[0], coords[1], False)
+            coords = numToCoordsH(-x, [val_matrix.n, val_matrix.m])
+            if coords is not None:
+                H_matrix.SetValue(coords[0], coords[1], False)
 
-    print(check_one_loop(V_matrix, H_matrix))
+    while not check_one_loop(V_matrix, H_matrix):
+        solver_interface.add_nq_solution()
+
+        solution = solver_interface.solve()
+        print(solution)
+        for x in solution:
+            if x > 0 and x % 2 == 0:
+                coords = numToCoordsV(x, [val_matrix.n, val_matrix.m])
+                if coords is not None:
+                    V_matrix.SetValue(coords[0], coords[1], True)
+            if x < 0 and x % 2 == 0:
+                coords = numToCoordsV(-x, [val_matrix.n, val_matrix.m])
+                if coords is not None:
+                    V_matrix.SetValue(coords[0], coords[1], False)
+            if x > 0 and x % 2 == 1:
+                coords = numToCoordsH(x, [val_matrix.n, val_matrix.m])
+                if coords is not None:
+                    H_matrix.SetValue(coords[0], coords[1], True)
+            if x < 0 and x % 2 == 1:
+                coords = numToCoordsH(-x, [val_matrix.n, val_matrix.m])
+                if coords is not None:
+                    H_matrix.SetValue(coords[0], coords[1], False)
+    
+    print(solution)
+    print('')
+    for x in solution:
+        if x > 0 and x % 2 == 0:
+            coords = numToCoordsV(x, [val_matrix.n, val_matrix.m])
+            print(coords)
+    
+    print('---')
+
+    for x in solution:
+        if x > 0 and x % 2 == 1:
+            coords = numToCoordsH(x, [val_matrix.n, val_matrix.m])
+            print(coords)

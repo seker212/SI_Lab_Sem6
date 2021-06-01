@@ -3,7 +3,7 @@ from typing import List, Optional
 from sympy.logic.boolalg import to_cnf
 from sympy.abc import A, B, C, D
 
-from matrix import Matrix
+from src.matrix import Matrix
 
 two_of_four = to_cnf((A&B&~C&~D)|(A&~B&C&~D)|(A&~B&~C&D)|(~A&B&C&~D)|(~A&B&~C&D)|(~A&~B&C&D))
 
@@ -78,6 +78,8 @@ class GlucoseInterface:
         for x in model.copy():
             result.append(-x)
         self.solver.add_clause(result)
+        if self._debug:
+            print(result)
 
     def add_exactly_one_or_nq_x(self, x: int, params: List[int]) -> None:
         # At least one
