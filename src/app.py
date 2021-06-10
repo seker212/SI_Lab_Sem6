@@ -10,11 +10,14 @@ from src.edgeConverters import *
 from src.rule_logic_functions import *
 from src.pre_succ import *
 
-if __name__ == '__main__':
-    filename = 'matrix.txt'
+def load(filename):
+    # filename = 'matrix.txt'
     pre_val_matrix = GetValuesFromFile(filename)
     val_matrix = Matrix(len(pre_val_matrix), pre_val_matrix[0].count(',')+1)
     SetValuesFromFile(val_matrix, pre_val_matrix)
+    return val_matrix
+
+def run(val_matrix):
     V_matrix = Matrix(val_matrix.n, val_matrix.m+1)
     H_matrix = Matrix(val_matrix.n+1, val_matrix.m)
     solver_interface = GlucoseInterface()
@@ -109,3 +112,6 @@ if __name__ == '__main__':
         if x > 0 and x % 2 == 1:
             coords = numToCoordsH(x, [val_matrix.n, val_matrix.m])
             print(coords)
+
+# running without GUI - example:
+# run(load("matrix.txt"))
