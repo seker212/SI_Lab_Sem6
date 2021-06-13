@@ -248,7 +248,7 @@ class Okno(QMainWindow):
         infoW = QMessageBox()
         infoW.setWindowTitle("Slitherlink")
         infoW.setWindowIcon(QIcon('Icons/info.png'))
-        infoW.setStyleSheet("QLabel{min-width: 600px;}")
+        infoW.setStyleSheet("QLabel{min-width: 450px;}")
         f = open("info.txt", "r", encoding='utf8')
         text = f.read()
         infoW.setText(text)

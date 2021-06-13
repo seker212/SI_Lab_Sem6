@@ -1,7 +1,8 @@
-    Slitherlink rozgrywa się na prostokątnej siatce kropek. Niektóre kwadraty utworzone przez kropki 
-mają wewnątrz cyfry. Celem jest połączenie kropek poziomymi i pionowymi krawędziami według 
+    Slitherlink rozgrywa się na prostokątnej siatce kropek.
+Niektóre kwadraty utworzone przez kropki mają wewnątrz cyfry.
+Celem jest połączenie kropek poziomymi i pionowymi krawędziami według 
 następujących zasad:
-    1. Każda cyfra symbolizuje dokładną liczbę krawędzi łączących kropki, które z nią sąsiadują. 
-Cyfry mogą zawierać się w zakresie 0-3.
+    1. Każda cyfra symbolizuje dokładną liczbę krawędzi łączących kropki,
+które z nią sąsiadują. Cyfry mogą zawierać się w zakresie 0-3.
     2. Utworzona pętla musi być pętlą zamkniętą.
     3. Poprawnym rozwiązaniem jest rozwiązanie zawierające tylko jedną pętlę.
