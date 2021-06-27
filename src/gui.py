@@ -7,9 +7,9 @@ import re, os
 
 from app import *
 
-class Okno(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):       
-        super(Okno, self).__init__(*args, *kwargs)
+        super(MainWindow, self).__init__(*args, *kwargs)
         self.setWindowTitle("Slitherlink")
 
         self.edited = False
@@ -303,7 +303,7 @@ class Value(QLabel):
 #App and window initialization
 guiapp = QApplication(sys.argv)
 
-window = Okno()
+window = MainWindow()
 window.setFixedSize(850, 950)
 window.setStyleSheet("background-color: rgb(204,204,225);")
 window.show()
