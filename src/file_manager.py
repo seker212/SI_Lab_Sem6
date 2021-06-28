@@ -1,10 +1,14 @@
 from src.matrix import Matrix
+import re
 
 def GetValuesFromFile(path):
     result = []
     with open(path, 'r') as file:
         content = file.readlines()
     for line in content:
+        x = re.match('^[0-3\,]*$',line)
+        if x is None:
+            return None
         newline = line.replace("\n", "")
         result.append(newline)
     return result
