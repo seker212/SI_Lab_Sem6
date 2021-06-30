@@ -13,6 +13,8 @@ from src.pre_succ import *
 def load(filename):
     # filename = 'matrix.txt'
     pre_val_matrix = GetValuesFromFile(filename)
+    if pre_val_matrix is None:
+        return None
     val_matrix = Matrix(len(pre_val_matrix), pre_val_matrix[0].count(',')+1)
     SetValuesFromFile(val_matrix, pre_val_matrix)
     return val_matrix

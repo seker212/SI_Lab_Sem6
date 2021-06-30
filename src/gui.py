@@ -200,7 +200,11 @@ class MainWindow(QMainWindow):
             files = self.fileDialog.selectedFiles()
             self.filePath.setText(files[0])
             self.matrix = load(files[0])
-            if (self.matrix.n < 2 or self.matrix.n > 12):
+            if self.matrix is None:
+                self.statusLabel.setText("Nieprawidłowy format pliku")
+                self.removeGrid()
+                self.solveButton.setDisabled(True)
+            elif (self.matrix.n < 2 or self.matrix.n > 12):
                 self.statusLabel.setText("Nieprawidłowe wymiary macierzy")
                 self.removeGrid()
                 self.solveButton.setDisabled(True)
